@@ -4,19 +4,14 @@
 
 {% block main %}
 
-
-<!-- PFApp/templates/PFApp/planes.html -->
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Lista de Planes</title>
+    <title>Agregar Plan</title>
 </head>
 <body>
-    <h1>Planes Disponibles</h1>
-
-    <!-- Formulario de ingreso de planes (solo visible para administradores) -->
-    {% if user.is_authenticated and user.is_staff %}
-    <form method="POST" action="{% url 'Planes' %}">
+    <h1>Agregar Nuevo Plan</h1>
+    <form method="POST" action="{% url 'agregar_plan' %}">
         {% csrf_token %}
         <label for="nombre">Nombre:</label>
         <input type="text" name="nombre" id="nombre" required><br>
@@ -31,16 +26,7 @@
         </select><br>
         <button type="submit">Guardar</button>
     </form>
-    {% endif %}
-    
-    <h2>Lista de Planes</h2>
-    <ul>
-        {% for plan in planes %}
-            <li>{{ plan.nombre }} - {{ plan.descripcion }} - ${{ plan.precio }} ({{ plan.periodo_facturacion }})</li>
-        {% endfor %}
-    </ul>
 </body>
 </html>
-
 
 {% endblock main %}

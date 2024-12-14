@@ -3,5 +3,40 @@
 {% load static %}
 
 {% block main %}
+<form method="GET" action="{% url 'Perfil' %}">
+    <label for="email">Buscar usuario por email:</label>
+    <input type="email" name="email" id="email" required>
+    <button type="submit">Buscar</button>
+</form>
+
+{% if usuario %}
+    <h2>Perfil de {{ usuario.nombre }} {{ usuario.apellido }}</h2>
+    <p>Email: {{ usuario.email }}</p>
+    <p>Teléfono: {{ usuario.telefono }}</p>
+    <p>Dirección: {{ usuario.direccion }}</p>
+    <p>Fecha de suscripción: {{ usuario.fecha_suscripcion }}</p>
+    <p>Estado de suscripción: {{ usuario.estado_suscripcion }}</p>
+{% else %}
+    <p>No se encontró ningún usuario con ese email.</p>
+{% endif %}
+
+
+<!-- PFApp/perfil.html -->
+{% if usuario %}
+  <h2>Perfil de {{ usuario.nombre }} {{ usuario.apellido }}</h2>
+  <p>Email: {{ usuario.email }}</p>
+  <p>Dirección: {{ usuario.direccion }}</p>
+  <!-- Otros datos del usuario -->
+  
+  <!-- Botones de acción -->
+  {% if request.user.is_staff %}
+    <a href="{% url 'agregar_pago' %}">Agregar Pago</a>
+{% else %}
+    <a href="{% url 'comprobante_pago' %}">Ver Comprobantes de Pago</a>
+{% endif %}
+
+{% else %}
+  <p>Usuario no encontrado.</p>
+{% endif %}
 
 {% endblock main %}

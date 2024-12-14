@@ -4,4 +4,21 @@
 
 {% block main %}
 
+<!DOCTYPE html>
+<html lang="en">
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    {% for field in form %}
+        {% if field.errors %}
+            <ul class="errorlist">
+                {% for error in field.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endfor %}
+    <button type="submit">Registrarse</button>
+</form>
+
 {% endblock main %}
