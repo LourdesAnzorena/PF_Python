@@ -1,0 +1,47 @@
+{% extends "PFApp/base.html" %}
+{% load static %}
+
+{% block main %}
+
+<h1>Gestionar Suscripciones</h1>
+
+<a href="{% url 'perfil' %}" class="btn">Volver al Perfil</a>
+
+<section>
+    <h2>Agregar una nueva suscripción</h2>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn">Suscribirse</button>
+    </form>
+</section>
+
+<section>
+    <h2>Suscripciones Actuales</h2>
+    {% if suscripciones %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Plan</th>
+                    <th>Fecha de Inicio</th>
+                    <th>Fecha de Fin</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for suscripcion in suscripciones %}
+                    <tr>
+                        <td>{{ suscripcion.plan.nombre }}</td>
+                        <td>{{ suscripcion.fecha_inicio }}</td>
+                        <td>{{ suscripcion.fecha_fin|default:"Sin definir" }}</td>
+                        <td>{{ "Activa" if suscripcion.activa else "Inactiva" }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No tienes suscripciones activas.</p>
+    {% endif %}
+</section>
+
+{% endblock %}

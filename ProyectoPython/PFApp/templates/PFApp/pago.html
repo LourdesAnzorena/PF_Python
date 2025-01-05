@@ -1,7 +1,38 @@
-{% extends "PFApp/base.html"%}
-
+{% extends "PFApp/base.html" %}
 {% load static %}
 
+
+
 {% block main %}
+<h1>Comprobantes de Pago</h1>
+
+{% if mensaje %}
+    <p>{{ mensaje }}</p>
+{% endif %}
+
+{% if pagos %}
+    <table>
+        <thead>
+            <tr>
+                <th>Usuario</th>
+                <th>Método de Pago</th>
+                <th>Monto</th>
+                <th>Fecha</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pago in pagos %}
+                <tr>
+                    <td>{{ pago.usuario.username }}</td>
+                    <td>{{ pago.metodo_pago }}</td>
+                    <td>${{ pago.monto }}</td>
+                    <td>{{ pago.fecha_pago }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>No se encontraron pagos registrados.</p>
+{% endif %}
 
 {% endblock main %}

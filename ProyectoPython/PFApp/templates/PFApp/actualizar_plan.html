@@ -1,0 +1,14 @@
+{% extends "PFApp/base.html" %}
+{% load static %}
+
+
+
+{% block main %}
+    <h1>Actualizar Plan</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Guardar cambios</button>
+    </form>
+    <a href="{% url 'Planes' %}">Volver</a>
+{% endblock main %}

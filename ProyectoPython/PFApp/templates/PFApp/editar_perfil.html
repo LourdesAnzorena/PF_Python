@@ -1,0 +1,24 @@
+{% extends "PFApp/base.html" %}
+{% load static %}
+
+
+{% block main %}
+<h1>Editar Perfil</h1>
+
+<!-- Formulario para editar perfil -->
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Guardar Cambios en el Perfil</button>
+</form>
+
+<h2>Cambiar Contraseña</h2>
+<!-- Formulario para cambiar contraseña -->
+<form method="post">
+    {% csrf_token %}
+    {{ contraseña_form.as_p }}
+    <button type="submit">Cambiar Contraseña</button>
+</form>
+
+<a href="{% url 'Perfil' %}">Cancelar</a>
+{% endblock %}

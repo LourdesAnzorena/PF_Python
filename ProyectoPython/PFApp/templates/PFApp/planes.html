@@ -1,46 +1,64 @@
-{% extends "PFApp/base.html"%}
-
+:{% extends "PFApp/base.html" %}
 {% load static %}
 
 {% block main %}
+    <h1>Planes</h1>
 
-
-<!-- PFApp/templates/PFApp/planes.html -->
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Lista de Planes</title>
-</head>
-<body>
-    <h1>Planes Disponibles</h1>
-
-    <!-- Formulario de ingreso de planes (solo visible para administradores) -->
-    {% if user.is_authenticated and user.is_staff %}
-    <form method="POST" action="{% url 'Planes' %}">
-        {% csrf_token %}
-        <label for="nombre">Nombre:</label>
-        <input type="text" name="nombre" id="nombre" required><br>
-        <label for="descripcion">Descripción:</label>
-        <textarea name="descripcion" id="descripcion" required></textarea><br>
-        <label for="precio">Precio:</label>
-        <input type="number" name="precio" id="precio" step="0.01" required><br>
-        <label for="periodo_facturacion">Periodo de Facturación:</label>
-        <select name="periodo_facturacion" id="periodo_facturacion" required>
-            <option value="mensual">Mensual</option>
-            <option value="anual">Anual</option>
-        </select><br>
-        <button type="submit">Guardar</button>
+    <!-- Formulario de búsqueda -->
+    <form method="get" action="{% url 'Planes' %}">
+        {{ form.as_p }}
+        <button type="submit">Buscar</button>
     </form>
+
+    {% if planes_filtrados %}
+        <h2>Resultados de la búsqueda:</h2>
+        <ul>
+            {% for plan in planes_filtrados %}
+                <li>
+                    {{ plan.nombre }}
+                    {% if user.is_authenticated %}
+                        {% if not user.is_staff %}
+                            <a href="{% url 'suscribirse_plan' plan.id %}">Suscribirse a este plan</a>
+                        {% endif %}
+                    {% endif %}
+                </li>
+            {% empty %}
+                <li>No se encontraron planes.</li>
+            {% endfor %}
+        </ul>
     {% endif %}
-    
-    <h2>Lista de Planes</h2>
-    <ul>
-        {% for plan in planes %}
-            <li>{{ plan.nombre }} - {{ plan.descripcion }} - ${{ plan.precio }} ({{ plan.periodo_facturacion }})</li>
-        {% endfor %}
-    </ul>
-</body>
-</html>
 
+    <h4>Planes Disponibles</h4>
 
+    {% if user.is_authenticated %}
+        <h5>Lista de Planes</h5>
+        <ul>
+            {% for plan in planes_disponibles %}
+                <li>
+                    {{ plan.nombre }} - {{ plan.descripcion }} - ${{ plan.precio }} ({{ plan.periodo_facturacion }})
+                    {% if not user.is_staff %}
+                        <p>Ya estás suscrito a este plan.</p> <!-- Mensaje que siempre se muestra si hay suscripción -->
+                        <a href="{% url 'suscribirse_plan' plan.id %}">Suscribirse</a>  
+                    {% endif %}
+                </li>
+            {% empty %}
+                <p>No hay planes disponibles para suscribirse.</p>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    {% if user.is_staff %}
+        <!-- Solo para administradores: Mostrar opciones para agregar, editar y eliminar planes -->
+        <a href="{% url 'agregar_plan' %}">Agregar nuevo plan</a>
+        <h4>Editar/Eliminar Planes</h4>
+        <ul>
+            {% for plan in planes_disponibles %}
+                <li>
+                    {{ plan.nombre }} 
+                    <a href="{% url 'actualizar_plan' plan.id %}">Editar</a> |
+                    <a href="{% url 'eliminar_plan' plan.id %}">Eliminar</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 {% endblock main %}

@@ -1,23 +1,17 @@
-{% extends "PFApp/base.html"%}
-
+{% extends "PFApp/base.html" %}
 {% load static %}
 
 {% block main %}
+<h1>Registro de Usuario</h1>
 
-<!DOCTYPE html>
-<html lang="en">
 <form method="post">
     {% csrf_token %}
-    {{ form.as_p }}
-    {% for field in form %}
-        {% if field.errors %}
-            <ul class="errorlist">
-                {% for error in field.errors %}
-                    <li>{{ error }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-    {% endfor %}
+    <h2>Datos de Cuenta</h2>
+    {{ registro_form.as_p }}
+
+    <h2>Información Personal</h2>
+    {{ usuario_form.as_p }}
+
     <button type="submit">Registrarse</button>
 </form>
 

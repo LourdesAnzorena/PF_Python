@@ -1,0 +1,18 @@
+{% extends "PFApp/base.html" %}
+{% load static %}
+
+{% block main %}
+<div class="container">
+    <h1>Sobre Nosotros</h1>
+    <p>Bienvenido a IntelliAssist, tu aliado en inteligencia artificial. Nos apasiona ofrecer soluciones innovadoras para ayudarte a alcanzar tus metas y hacer que la tecnología sea accesible para todos.</p>
+
+    <h2>Nuestra Misión</h2>
+    <p>Facilitar el acceso a herramientas de inteligencia artificial para potenciar la productividad y creatividad de nuestros usuarios.</p>
+
+    <h2>Nuestro Equipo</h2>
+    <p>Esta página fue creada por Lourdes Anzorena, estudiante de la Diplomatura en Data Science para el curso de Python </p>
+
+    <h2>Contacto</h2>
+    <p>¿Tienes preguntas o sugerencias? <a href="{% url 'Contactanos' %}">Contáctanos</a>.</p>
+</div>
+{% endblock main %}

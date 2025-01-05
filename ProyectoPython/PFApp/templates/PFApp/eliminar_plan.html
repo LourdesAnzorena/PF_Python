@@ -1,0 +1,13 @@
+{% extends "PFApp/base.html" %}
+{% load static %}
+
+
+{% block main %}
+    <h1>Eliminar Plan</h1>
+    <p>¿Estás seguro de que deseas eliminar el plan "{{ plan.nombre }}"?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Eliminar</button>
+    </form>
+    <a href="{% url 'Planes' %}">Cancelar</a>
+{% endblock main %}

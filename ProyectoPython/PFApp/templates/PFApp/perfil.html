@@ -1,42 +1,60 @@
-{% extends "PFApp/base.html"%}
-
+{% extends "PFApp/base.html" %}
 {% load static %}
 
 {% block main %}
-<form method="GET" action="{% url 'Perfil' %}">
-    <label for="email">Buscar usuario por email:</label>
-    <input type="email" name="email" id="email" required>
-    <button type="submit">Buscar</button>
-</form>
+<h1>Perfil del Usuario</h1>
 
 {% if usuario %}
-    <h2>Perfil de {{ usuario.nombre }} {{ usuario.apellido }}</h2>
-    <p>Email: {{ usuario.email }}</p>
-    <p>Teléfono: {{ usuario.telefono }}</p>
-    <p>Dirección: {{ usuario.direccion }}</p>
+    <h2>{{ usuario.usuario.first_name }} {{ usuario.usuario.last_name }}</h2>
+    <p>Email: {{ usuario.usuario.email }}</p>
+    <p>Teléfono: {{ usuario.telefono|default:"No especificado" }}</p>
+    <p>Dirección: {{ usuario.direccion|default:"No especificada" }}</p>
     <p>Fecha de suscripción: {{ usuario.fecha_suscripcion }}</p>
-    <p>Estado de suscripción: {{ usuario.estado_suscripcion }}</p>
-{% else %}
-    <p>No se encontró ningún usuario con ese email.</p>
-{% endif %}
 
+    <a href="{% url 'editar_perfil' %}" class="btn">Editar Perfil</a>
 
-<!-- PFApp/perfil.html -->
-{% if usuario %}
-  <h2>Perfil de {{ usuario.nombre }} {{ usuario.apellido }}</h2>
-  <p>Email: {{ usuario.email }}</p>
-  <p>Dirección: {{ usuario.direccion }}</p>
-  <!-- Otros datos del usuario -->
-  
-  <!-- Botones de acción -->
-  {% if request.user.is_staff %}
-    <a href="{% url 'agregar_pago' %}">Agregar Pago</a>
-{% else %}
-    <a href="{% url 'comprobante_pago' %}">Ver Comprobantes de Pago</a>
-{% endif %}
+    <h2>Suscripciones</h2>
+    {% if suscripciones %}
+        <ul>
+            {% for suscripcion in suscripciones %}
+                <li>
+                    <strong>Plan:</strong> {{ suscripcion.plan.nombre }}<br>
+                    <strong>Descripción:</strong> {{ suscripcion.plan.descripcion }}<br>
+                    <strong>Precio:</strong> ${{ suscripcion.plan.precio }} por {{ suscripcion.plan.periodo_facturacion }}<br>
+                    <strong>Fecha de inicio:</strong> {{ suscripcion.fecha_inicio }}<br>
+                    <strong>Fecha de fin:</strong> {{ suscripcion.fecha_fin|default:"No definida" }}<br>
+                    <strong>Estado:</strong> {% if suscripcion.activa %}Activa{% else %}Inactiva{% endif %}<br>
 
+                    {% if suscripcion.activa %}
+                        <a href="{% url 'cancelar_suscripcion' suscripcion.id %}" class="btn btn-warning">Cancelar suscripción</a>
+                    {% else %}
+                        <p>Tu suscripción está cancelada.</p>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No tienes ninguna suscripción activa.</p>
+    {% endif %}
+
+    <h2>Historial de pagos</h2>
+    {% if pagos %}
+        <ul>
+            {% for pago in pagos %}
+                <li>{{ pago.fecha_pago }} - {{ pago.metodo_pago }}: ${{ pago.monto }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No tienes pagos registrados.</p>
+    {% endif %}
+
+    {% if request.user.is_staff %}
+        <a href="{% url 'agregar_pago' %}" class="btn">Agregar Pago</a>
+    {% else %}
+        <a href="{% url 'comprobante_pago' %}" class="btn">Ver Comprobantes de Pago</a>
+    {% endif %}
 {% else %}
-  <p>Usuario no encontrado.</p>
+    <p>No se encontró el usuario.</p>
 {% endif %}
 
 {% endblock main %}

@@ -1,25 +1,17 @@
-{% extends "PFApp/base.html"%}
-
+{% extends "PFApp/base.html" %}
 {% load static %}
 
-{% block main %}
-<!-- PFApp/templates/PFApp/agregar_pago.html -->
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Agregar Pago</title>
-</head>
-<body>
-    <h1>Agregar Nuevo Pago</h1>
-    <form method="POST" action="{% url 'agregar_pago' %}">
-        {% csrf_token %}
-        <label for="metodo_pago">Método de Pago:</label>
-        <input type="text" name="metodo_pago" id="metodo_pago" required><br>
-        <label for="monto">Monto:</label>
-        <input type="number" name="monto" id="monto" step="0.01" required><br>
-        <button type="submit">Guardar</button>
-    </form>
-</body>
-</html>
 
-{% endblock main %}
+{% block main %}
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <label for="usuario_id">Usuario:</label>
+    <select name="usuario_id">
+        {% for user in usuarios %}
+            <option value="{{ user.id }}">{{ user.username }}</option>
+        {% endfor %}
+    </select>
+    <button type="submit">Guardar</button>
+</form>
+ {% endblock main %}
